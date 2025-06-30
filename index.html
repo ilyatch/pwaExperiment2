@@ -43,10 +43,10 @@
     // Get stock price (or fallback if offline)
     stockButton.addEventListener('click', () => {
 
-fetch('https://www.boredapi.com/api/activity/')
+fetch('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m')
   .then(res => res.json())
   .then(data => {
-    output.textContent = `Try this: ${data.activity}`;
+    output.textContent = `generation time: ${data.generationtime_ms}`;
   })
   .catch(() => {
     output.textContent = "Can't fetch activity. Are you offline?";
