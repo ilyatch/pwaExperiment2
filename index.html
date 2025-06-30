@@ -42,14 +42,16 @@
 
     // Get stock price (or fallback if offline)
     stockButton.addEventListener('click', () => {
-     fetch('https://api.quotable.io/random')
+
+fetch('https://www.boredapi.com/api/activity/')
   .then(res => res.json())
   .then(data => {
-    output.textContent = `"${data.content}" — ${data.author}`;
+    output.textContent = `Try this: ${data.activity}`;
   })
   .catch(() => {
-    output.textContent = "Failed to fetch quote. Are you offline?";
+    output.textContent = "Can't fetch activity. Are you offline?";
   });
+      
     });
   </script>
 </body>
