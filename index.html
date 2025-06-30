@@ -42,15 +42,14 @@
 
     // Get stock price (or fallback if offline)
     stockButton.addEventListener('click', () => {
-      fetch('https://api.coindesk.com/v1/bpi/currentprice/USD.json')
-        .then(response => response.json())
-        .then(data => {
-          const price = data.bpi.USD.rate;
-          output.textContent = `Bitcoin Price: $${price}`;
-        })
-        .catch(err => {
-          output.textContent = "Unable to fetch stock data. Are you offline?";
-        });
+     fetch('https://api.quotable.io/random')
+  .then(response => response.json())
+  .then(data => {
+    output.textContent = `"${data.content}" — ${data.author}`;
+  })
+  .catch(() => {
+    output.textContent = "Unable to fetch quote. Are you offline?";
+  });
     });
   </script>
 </body>
