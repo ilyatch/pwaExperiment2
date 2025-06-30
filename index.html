@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <title>Hello PWA</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 2em; }
+    button { padding: 10px 20px; margin: 10px; font-size: 1em; }
+  </style>
+</head>
+<body>
+  <h1>Hello World!</h1>
+  <p>This app works offline once installed.</p>
+
+  <button id="timeButton">Show Time</button>
+  <button id="stockButton">Get Stock Price</button>
+  <p id="output"></p>
+
+  <script>
+    // Register the service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+
+    const timeButton = document.getElementById('timeButton');
+    const stockButton = document.getElementById('stockButton');
+    const output = document.getElementById('output');
+
+    // Show local time
+    timeButton.addEventListener('click', () => {
+      const now = new Date();
+      timeButton.textContent = now.toLocaleTimeString();
+    });
+
+    // Get stock price (or fallback if offline)
+    stockButton.addEventListener('click', () => {
+      fetch('https://api.coindesk.com/v1/bpi/currentprice/USD.json')
+        .then(response => response.json())
+        .then(data => {
+          const price = data.bpi.USD.rate;
+          output.textContent = `Bitcoin Price: $${price}`;
+        })
+        .catch(err => {
+          output.textContent = "Unable to fetch stock data. Are you offline?";
+        });
+    });
+  </script>
+</body>
+</html>
