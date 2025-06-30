@@ -1,9 +1,9 @@
 const CACHE_NAME = 'hello-pwa-static-v1';
 const OFFLINE_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './icon.png'
 ];
 
 self.addEventListener('install', event => {
