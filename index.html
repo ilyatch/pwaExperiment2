@@ -22,6 +22,7 @@
 
   <button id="timeButton">Show Time</button>
   <button id="stockButton">Get Stock Price</button>
+  <button id="badgeButton">Badge stuff</button>
   <p id="output"></p>
 
   <script>
@@ -32,7 +33,23 @@
 
     const timeButton = document.getElementById('timeButton');
     const stockButton = document.getElementById('stockButton');
+    const badgeButton = document.getElementById('badgeButton');
     const output = document.getElementById('output');
+
+    badgeButton.addEventListener('click',() =>{
+      Notification.requestPermission().then((result) => {
+        console.log(result);
+
+        // Check for support first.
+
+      });
+
+          if (navigator.setAppBadge) {
+      // Display the number of unread messages.
+      navigator.setAppBadge(27);
+    }
+      
+    });
 
     // Show local time
     timeButton.addEventListener('click', () => {
