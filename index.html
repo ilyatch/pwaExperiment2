@@ -23,7 +23,7 @@
   <button id="timeButton">Show Time</button>
   <button id="stockButton">Get Stock Price</button>
   <button id="badgeButton">Badge stuff</button>
-  <button id="notifyButton">Notify stuff</button>
+  <button id="notifyButton">Notify stuff2</button>
   <p id="output"></p>
 
   <script>
@@ -48,7 +48,7 @@
         //icon: notifImg,
       };
       new Notification(notifTitle, options);
-      setTimeout(randomNotification, 10000);
+      setTimeout(randomNotify, 10000);
     }
     notifyButton.addEventListener("click", () =>{
       randomNotify();
