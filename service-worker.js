@@ -31,6 +31,16 @@ self.addEventListener('fetch', event => {
   );
 });
 
+self.addEventListener('push', event => {
+    const data = event.data ? event.data.text() : 'No payload';
+    event.waitUntil(
+        self.registration.showNotification('Push Received', {
+            body: data
+        })
+    );
+});
+
+
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
