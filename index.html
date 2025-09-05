@@ -126,24 +126,30 @@
       navigator.serviceWorker.register('service-worker.js');
     }
 
-    const swRegistration = await navigator.serviceWorker.getRegistration();
+   function updateBadge(){
+    (async () =>
+    {
+      const swRegistration = await navigator.serviceWorker.getRegistration();
 
-    // 2. Ask for notification permission
-    const permission = await Notification.requestPermission();
-    if (permission !== 'granted') {
-        console.log('Permission denied for notifications');
-        //return;
-    }
+      // 2. Ask for notification permission
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+          console.log('Permission denied for notifications');
+          //return;
+      }
 
-    if (navigator.setAppBadge) {
-        // Display the number of unread messages.
-        navigator.setAppBadge(27);
-    }
+      if (navigator.setAppBadge) {
+          // Display the number of unread messages.
+          navigator.setAppBadge(getToggledCount);
+      }
+    })();
+  }
 
   document.querySelectorAll('.toggle-img').forEach(img => {
     img.addEventListener('click', () => {
       const isEmpty = img.src.includes(img.dataset.empty);
       img.src = isEmpty ? img.dataset.full : img.dataset.empty;
+      updateBadge();
       console.log("Currently full:", getToggledCount()); // example usage
     });
   });
@@ -153,6 +159,8 @@
     document.querySelectorAll('.toggle-img').forEach(img => {
       img.src = img.dataset.empty;
     });
+      updateBadge();
+
     console.log("Currently full:", getToggledCount()); // should log 0
   });
 
