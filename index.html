@@ -144,7 +144,7 @@
       alert('got a push '+data)
     }
 
-    document.getElementById("#imgHeader").addEventListener('click', async ()=>{
+    document.getElementById("imgHeader").addEventListener('click', async ()=>{
       
       
       const swRegistration = await navigator.serviceWorker.getRegistration();
@@ -158,7 +158,7 @@
       //console.log('Push subscription object:');
       //console.log(JSON.stringify(subscription.toJSON(), null, 2));
 
-      text = JSON.stringify(subscription.toJSON(), null, 2);
+      var text = JSON.stringify(subscription.toJSON(), null, 2);
       navigator.clipboard.writeText(text)
       alert('VAPID keys copied to clipboard, email to author');
     });
