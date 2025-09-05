@@ -108,7 +108,7 @@
     <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
     <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>-->
   </main>
-  <footer>Footer</footer>
+  <footer><button id="reset-btn">Reset All</button></footer>
  <!-- <h1>Hello World! updated</h1>
   <p>This app works offline once installed.</p>
 
@@ -126,12 +126,41 @@
       navigator.serviceWorker.register('service-worker.js');
     }
 
-    document.querySelectorAll('.toggle-img').forEach(img => {
-      img.addEventListener('click', () => {
-        const isEmpty = img.src.includes(img.dataset.empty);
-        img.src = isEmpty ? img.dataset.full : img.dataset.empty;
-      });
+    const swRegistration = await navigator.serviceWorker.getRegistration();
+
+    // 2. Ask for notification permission
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') {
+        console.log('Permission denied for notifications');
+        return;
+    }
+
+  document.querySelectorAll('.toggle-img').forEach(img => {
+    img.addEventListener('click', () => {
+      const isEmpty = img.src.includes(img.dataset.empty);
+      img.src = isEmpty ? img.dataset.full : img.dataset.empty;
+      console.log("Currently full:", getToggledCount()); // example usage
     });
+  });
+
+  // Reset all images to empty
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    document.querySelectorAll('.toggle-img').forEach(img => {
+      img.src = img.dataset.empty;
+    });
+    console.log("Currently full:", getToggledCount()); // should log 0
+  });
+
+  // Helper: count how many are showing 'full'
+  function getToggledCount() {
+    let count = 0;
+    document.querySelectorAll('.toggle-img').forEach(img => {
+      if (img.src.includes(img.dataset.full)) {
+        count++;
+      }
+    });
+    return count;
+  }
 
     const timeButton = document.getElementById('timeButton');
     const stockButton = document.getElementById('stockButton');
@@ -184,7 +213,7 @@
     //const swRegistration = await navigator.serviceWorker.register('/sw.js');
     //console.log('Service Worker registered:', swRegistration);
 
-     const swRegistration = await navigator.serviceWorker.getRegistration();
+    const swRegistration = await navigator.serviceWorker.getRegistration();
 
     // 2. Ask for notification permission
     const permission = await Notification.requestPermission();

@@ -1,10 +1,10 @@
 {
-  "name": "Hello PWA",
-  "short_name": "HelloPWA",
+  "name": "Hydration Cat",
+  "short_name": "HydrationCat",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "description": "A minimal PWA that works offline",
+  "description": "Helps you track the number of glasses of water you drank... with cats!",
   "icons": [
     {
       "src": "icon.png",
