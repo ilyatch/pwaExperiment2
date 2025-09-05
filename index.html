@@ -15,9 +15,62 @@
     body { font-family: sans-serif; text-align: center; margin-top: 2em; }
     button { padding: 10px 20px; margin: 10px; font-size: 1em; }
   </style>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  /* Remove default margins */
+  body {
+    margin: 0;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* header - content - footer */
+  }
+
+  header, footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    line-height: 10vh;   /* vertically center text */
+    font-size: 1.2em;
+  }
+
+  main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    height: 100%;
+  }
+
+  .cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* crop if necessary */
+  }
+
+  .cell img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* keeps aspect ratio */
+  }
+</style>
+
 </head>
 <body>
-  <h1>Hello World! updated</h1>
+
+  <header>Header</header>
+  <main>
+    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
+    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
+    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
+    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
+    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
+    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
+    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
+    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
+  </main>
+  <footer>Footer</footer>
+ <!-- <h1>Hello World! updated</h1>
   <p>This app works offline once installed.</p>
 
   <button id="timeButton">Show Time</button>
@@ -26,7 +79,7 @@
   <button id="notifyButton">Notify stuff2</button>
   <button id="pushButton">setup push</button>
   <textarea id="myTextArea" rows="5" cols="40"></textarea>
-  <p id="output"></p>
+  <p id="output"></p>-->
 
   <script>
     // Register the service worker
@@ -62,24 +115,24 @@
     const output = document.getElementById('output');
 
     function urlBase64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-        .replace(/-/g, '+')
-        .replace(/_/g, '/');
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding)
+          .replace(/-/g, '+')
+          .replace(/_/g, '/');
 
-    const rawData = atob(base64);
-    return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
-}
+      const rawData = atob(base64);
+      return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+    }
 
-async function initPush() {
-    if (!('serviceWorker' in navigator)) {
-        console.log('Service workers not supported.');
-        return;
-    }
-    if (!('PushManager' in window)) {
-        console.log('Push API not supported.');
-        return;
-    }
+    async function initPush() {
+      if (!('serviceWorker' in navigator)) {
+          console.log('Service workers not supported.');
+          return;
+      }
+      if (!('PushManager' in window)) {
+          console.log('Push API not supported.');
+          return;
+      } 
 
     // 1. Register service worker
     //const swRegistration = await navigator.serviceWorker.register('/sw.js');
@@ -109,7 +162,7 @@ async function initPush() {
     ta.value = JSON.stringify(subscription.toJSON(), null, 2);
 
     alert('Subscription created! Check console for JSON (copy-paste for dev).');
-}
+  }
 
     pushButton.addEventListener('click',()=>{
       initPush();
@@ -149,6 +202,6 @@ fetch('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hou
   });
       
     });
-  </script>
+</script>
 </body>
 </html>
