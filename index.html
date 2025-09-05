@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="icon.png">
   
   <link rel="manifest" href="manifest.json" />
-  <title>Hello PWA</title>
+  <title>Hydration Cat</title>
   <style>
     body { font-family: sans-serif; text-align: center; margin-top: 2em; }
     button { padding: 10px 20px; margin: 10px; font-size: 1em; }
@@ -38,7 +38,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #333; color: #fff;
+    background: #87B7DD; color: #fff;
     padding: 0 8px;
     /* Safe areas without growing the fixed height */
     padding-top: env(safe-area-inset-top);
@@ -58,7 +58,15 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background: #111; /* optional to see letterboxing */
+    background: #87B7DD; /* optional to see letterboxing */
+  }
+
+  header img {
+    display: block;        /* remove baseline gap */
+    width: 100%;
+    height: 100%;
+    object-fit: contain;   /* keep aspect ratio, always fit inside */
+    /* no cropping, no stretching */
   }
 
   .cell img {
@@ -73,7 +81,7 @@
 </head>
 <body>
 
-  <header>Header</header>
+  <header><img src="header.png"></header>
   <main>
     <div class="cell">
       <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
