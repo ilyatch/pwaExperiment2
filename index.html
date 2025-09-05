@@ -140,8 +140,9 @@
 
       if (navigator.setAppBadge) {
           // Display the number of unread messages.
-          navigator.setAppBadge(getToggledCount);
+          navigator.setAppBadge(getToggledCount());
       }
+
     })();
   }
 
