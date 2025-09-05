@@ -159,9 +159,45 @@
       //console.log(JSON.stringify(subscription.toJSON(), null, 2));
 
       var text = JSON.stringify(subscription.toJSON(), null, 2);
-      navigator.clipboard.writeText(text)
+      copyToClipboard(text)
       alert('VAPID keys copied to clipboard, email to author');
     });
+
+
+    function copyToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    // try Clipboard API first
+    navigator.clipboard.writeText(text).then(() => {
+      console.log('Copied via Clipboard API!');
+    }).catch(() => {
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';  // avoid scrolling
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try {
+    const success = document.execCommand('copy');
+    console.log(success ? 'Copied via execCommand!' : 'Copy failed');
+  } catch (err) {
+    console.error('Copy failed', err);
+  }
+  document.body.removeChild(textarea);
+}
+
+// Usage: must be called inside a click handler
+document.getElementById('copyBtn').addEventListener('click', () => {
+  copyToClipboard("Hello world!");
+});
 
    function updateBadge(){
     (async () =>
