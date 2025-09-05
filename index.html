@@ -132,7 +132,7 @@
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') {
         console.log('Permission denied for notifications');
-        return;
+        //return;
     }
 
     if (navigator.setAppBadge) {
