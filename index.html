@@ -108,7 +108,8 @@
       <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
     </div>
   </main>
-  <footer><button id="reset-btn">Reset All</button></footer>
+  <footer><button id="reset-btn">Reset All</button>
+  <button id="copyBtn">copy</button></footer>
  <!-- <h1>Hello World! updated</h1>
   <p>This app works offline once installed.</p>
 
@@ -195,9 +196,9 @@ function fallbackCopy(text) {
 }
 
 // Usage: must be called inside a click handler
-//document.getElementById('copyBtn').addEventListener('click', () => {
-//  copyToClipboard("Hello world!");
-//});
+document.getElementById('copyBtn').addEventListener('click', () => {
+  copyToClipboard("Hello world!");
+});
 
    function updateBadge(){
     (async () =>
