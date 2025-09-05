@@ -75,14 +75,38 @@
 
   <header>Header</header>
   <main>
+    <div class="cell">
+      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+    </div>
+    <div class="cell">
+      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+    </div>
+    <div class="cell">
+      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+    </div>
+    <div class="cell">
+      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+    </div>
+    <div class="cell">
+      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+    </div>
+    <div class="cell">
+      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+    </div>
+    <div class="cell">
+      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+    </div>
+    <div class="cell">
+      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+    </div>
+    <!--<div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
     <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
     <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
     <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
     <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
     <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
     <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
-    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
-    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
+    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>-->
   </main>
   <footer>Footer</footer>
  <!-- <h1>Hello World! updated</h1>
@@ -101,6 +125,13 @@
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js');
     }
+
+    document.querySelectorAll('.toggle-img').forEach(img => {
+      img.addEventListener('click', () => {
+        const isEmpty = img.src.includes(img.dataset.empty);
+        img.src = isEmpty ? img.dataset.full : img.dataset.empty;
+      });
+    });
 
     const timeButton = document.getElementById('timeButton');
     const stockButton = document.getElementById('stockButton');
