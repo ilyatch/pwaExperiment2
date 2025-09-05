@@ -5,7 +5,8 @@ const OFFLINE_ASSETS = [
   './manifest.json',
   './icon.png',
   './empty.png',
-  './full.png'
+  './full.png',
+  './header.png'
 ];
 
 self.addEventListener('install', event => {
@@ -40,6 +41,15 @@ self.addEventListener('push', event => {
             body: data
         })
     );
+
+    self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then(clients => {
+      clients.forEach(client => {
+        client.postMessage({
+          type: 'push-event',
+          payload: data
+        });
+      });
+    });
 });
 
 

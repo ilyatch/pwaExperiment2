@@ -81,7 +81,7 @@
 </head>
 <body>
 
-  <header><img src="header.png"></header>
+  <header><img id="imgHeader" src="header.png"></header>
   <main>
     <div class="cell">
       <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
@@ -107,14 +107,6 @@
     <div class="cell">
       <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
     </div>
-    <!--<div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
-    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
-    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
-    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
-    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
-    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
-    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>
-    <div class="cell"><img src="https://www.placecats.com/poppy/200/200" alt=""></div>-->
   </main>
   <footer><button id="reset-btn">Reset All</button></footer>
  <!-- <h1>Hello World! updated</h1>
@@ -129,10 +121,47 @@
   <p id="output"></p>-->
 
   <script type="module">
+    const applicationServerKey = urlBase64ToUint8Array('BO1d4VwN0Ivx6hGA1pH1WL84NhD3C7Hd45uTeVQR01DiQXaT6gmbOhEte2EGkFeUeGra2NyPkzpw_ygGZQw3sFk');
+
     // Register the service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js');
     }
+
+    navigator.serviceWorker.addEventListener('message', event => {
+      const message = event.data;
+      
+      if (message.type === 'push-event') {
+        console.log('Push data received in app:', message.payload);
+        // Invoke your method here
+        handlePushMessage(message.payload);
+      }
+    });
+
+    function handlePushMessage(data) {
+      // Example: toggle images, show modal, etc.
+      //console.log("Handling push:", data);
+      alert('got a push '+data)
+    }
+
+    document.getElementById("#imgHeader").addEventListener('click', async ()=>{
+      
+      
+      const swRegistration = await navigator.serviceWorker.getRegistration();
+      const permission = await Notification.requestPermission();
+      const subscription = await swRegistration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey
+      });
+
+      // 4. Show subscription details in JSON
+      //console.log('Push subscription object:');
+      //console.log(JSON.stringify(subscription.toJSON(), null, 2));
+
+      text = JSON.stringify(subscription.toJSON(), null, 2);
+      navigator.clipboard.writeText(text)
+      alert('VAPID keys copied to clipboard, email to author');
+    });
 
    function updateBadge(){
     (async () =>
@@ -183,6 +212,17 @@
     });
     return count;
   }
+
+  function urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding)
+          .replace(/-/g, '+')
+          .replace(/_/g, '/');
+
+      const rawData = atob(base64);
+      return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+    }
+
 /*
     const timeButton = document.getElementById('timeButton');
     const stockButton = document.getElementById('stockButton');
@@ -211,15 +251,7 @@
 
     const output = document.getElementById('output');
 
-    function urlBase64ToUint8Array(base64String) {
-      const padding = '='.repeat((4 - base64String.length % 4) % 4);
-      const base64 = (base64String + padding)
-          .replace(/-/g, '+')
-          .replace(/_/g, '/');
-
-      const rawData = atob(base64);
-      return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
-    }
+    
 
     async function initPush() {
       if (!('serviceWorker' in navigator)) {
