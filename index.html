@@ -120,7 +120,7 @@
   <textarea id="myTextArea" rows="5" cols="40"></textarea>
   <p id="output"></p>-->
 
-  <script>
+  <script type="module">
     // Register the service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js');
@@ -133,6 +133,11 @@
     if (permission !== 'granted') {
         console.log('Permission denied for notifications');
         return;
+    }
+
+    if (navigator.setAppBadge) {
+        // Display the number of unread messages.
+        navigator.setAppBadge(27);
     }
 
   document.querySelectorAll('.toggle-img').forEach(img => {
