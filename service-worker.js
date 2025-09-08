@@ -6,7 +6,8 @@ const OFFLINE_ASSETS = [
   './icon.png',
   './empty.png',
   './full.png',
-  './header.png'
+  './header.png',
+  './dancing.gif'
 ];
 
 self.addEventListener('install', event => {
@@ -34,14 +35,26 @@ self.addEventListener('fetch', event => {
   );
 });
 
+self.addEventListener("message", (event) => {
+  console.log("SW got message:", event.data);
+
+  if (event.data.type === "SET_USER_DATA") {
+    // store in memory, IndexedDB, Cache API, etc.
+    self.userData = event.data.payload;
+    alert("user data set");
+  }
+});
+
 self.addEventListener('push', event => {
     const data = event.data ? event.data.text() : 'No payload';
+   
+    /*
     event.waitUntil(
         self.registration.showNotification('Push Received', {
             body: data
         })
     );
-
+*/
     self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then(clients => {
       clients.forEach(client => {
         client.postMessage({

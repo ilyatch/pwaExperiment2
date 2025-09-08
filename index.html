@@ -248,6 +248,13 @@ function fallbackCopy(text) {
       }
 
     })();
+
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: "SET_USER_DATA",
+        payload: getToggledCount()
+      });
+    }
   }
 
   document.querySelectorAll('.toggle-img').forEach(img => {
