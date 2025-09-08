@@ -135,14 +135,29 @@
       if (message.type === 'push-event') {
         console.log('Push data received in app:', message.payload);
         // Invoke your method here
+        alert("push is inside app")
         handlePushMessage(message.payload);
       }
     });
 
+    const thingsToSay =[
+    "Not a great start, drink water MEOW! 🐈",
+    "So... thirsty...🐱",
+    "So... thirsty...🐱",
+    "So... thirsty... 🐈",
+    "So... thirsty...🐈",
+    "So... thirsty...🐱",
+    "Almost there, one more glass! 🐈",
+    ];
+
     function handlePushMessage(data) {
-      // Example: toggle images, show modal, etc.
-      //console.log("Handling push:", data);
-      alert('got a push '+data)
+
+      var count = getToggledCount();
+      if (count < 8)
+      {
+        let messageToShow =thingsToSay[count];
+        alert("have to say " + messageToShow);
+      }
     }
 
     document.getElementById("imgHeader").addEventListener('click', async ()=>{
