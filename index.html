@@ -109,8 +109,8 @@
     </div>
   </main>
   <footer><button id="reset-btn">Reset All</button>
-  <button id="copyBtn">copy</button></footer>
- <!-- <h1>Hello World! updated</h1>
+   <!-- <button id="copyBtn">copy</button></footer>
+<h1>Hello World! updated</h1>
   <p>This app works offline once installed.</p>
 
   <button id="timeButton">Show Time</button>
@@ -211,9 +211,9 @@ function fallbackCopy(text) {
 }
 
 // Usage: must be called inside a click handler
-document.getElementById('copyBtn').addEventListener('click', () => {
-  copyToClipboard("Hello world!");
-});
+//document.getElementById('copyBtn').addEventListener('click', () => {
+//  copyToClipboard("Hello world!");
+//});
 
    function updateBadge(){
     (async () =>
@@ -240,9 +240,32 @@ document.getElementById('copyBtn').addEventListener('click', () => {
       const isEmpty = img.src.includes(img.dataset.empty);
       img.src = isEmpty ? img.dataset.full : img.dataset.empty;
       updateBadge();
-      console.log("Currently full:", getToggledCount()); // example usage
+      let count = getToggledCount();
+      console.log("Currently full:", count); // example usage
+      if (count == 8)
+      {
+        swapImages();
+      }
+
     });
   });
+
+  function swapImages() {
+      const images = document.querySelectorAll('.toggle-img');
+      
+      // Save originals
+      images.forEach(img => {
+        img.dataset.original = img.src;
+        img.src = "dancing.gif"; // the temporary image
+      });
+
+      // Restore after 5s
+      setTimeout(() => {
+        images.forEach(img => {
+          img.src = img.dataset.original;
+        });
+      }, 3000);
+    }
 
   // Reset all images to empty
   document.getElementById('reset-btn').addEventListener('click', () => {
