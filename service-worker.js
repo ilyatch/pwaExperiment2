@@ -45,7 +45,19 @@ self.addEventListener("message", (event) => {
   }
 });
 
+
 self.addEventListener('push', event => {
+  const data = event.data.json();
+  event.waitUntil(
+    // in here we pass showNotification, but if you pass a promise, like fetch,
+    // then you should return showNotification inside of it. like above example.
+    self.registration.showNotification(data.title, {
+      body: data.content
+    })
+  );
+});
+
+self.addEventListener('pushaaa', event => {
     const data = event.data ? event.data.text() : 'No payload';
    
     var count = localStorage.getItem("count");
