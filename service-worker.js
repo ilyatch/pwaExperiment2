@@ -48,6 +48,14 @@ self.addEventListener("message", (event) => {
 self.addEventListener('push', event => {
     const data = event.data ? event.data.text() : 'No payload';
    
+    var count = localStorage.getItem("count");
+
+    event.waitUntil(
+        self.registration.showNotification('Push with count ' + count, {
+            body: data
+        })
+    );
+
     /*
     event.waitUntil(
         self.registration.showNotification('Push Received', {
@@ -55,14 +63,14 @@ self.addEventListener('push', event => {
         })
     );
 */
-    self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then(clients => {
+    /*self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then(clients => {
       clients.forEach(client => {
         client.postMessage({
           type: 'push-event',
           payload: data
         });
       });
-    });
+    });*/
 });
 
 

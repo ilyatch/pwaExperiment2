@@ -109,17 +109,7 @@
     </div>
   </main>
   <footer><button id="reset-btn">Reset All</button>
-   <!-- <button id="copyBtn">copy</button></footer>
-<h1>Hello World! updated</h1>
-  <p>This app works offline once installed.</p>
 
-  <button id="timeButton">Show Time</button>
-  <button id="stockButton">Get Stock Price</button>
-  <button id="badgeButton">Badge stuff</button>
-  <button id="notifyButton">Notify stuff2</button>
-  <button id="pushButton">setup push</button>
-  <textarea id="myTextArea" rows="5" cols="40"></textarea>
-  <p id="output"></p>-->
 
   <script type="module">
     const applicationServerKey = urlBase64ToUint8Array('BO1d4VwN0Ivx6hGA1pH1WL84NhD3C7Hd45uTeVQR01DiQXaT6gmbOhEte2EGkFeUeGra2NyPkzpw_ygGZQw3sFk');
@@ -249,12 +239,14 @@ function fallbackCopy(text) {
 
     })();
 
-    if (navigator.serviceWorker.controller) {
+    localStorage.setItem('count', getToggledCount());
+
+    /*if (navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
         type: "SET_USER_DATA",
         payload: getToggledCount()
       });
-    }
+    }*/
   }
 
   document.querySelectorAll('.toggle-img').forEach(img => {
