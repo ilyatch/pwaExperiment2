@@ -152,19 +152,21 @@
       {
         isValidReady = true;
       }
-      const swRegistration = await navigator.serviceWorker.getRegistration();
-      const permission = await Notification.requestPermission();
-      const subscription = await swRegistration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey
-      });
+      else{
 
-      // 4. Show subscription details in JSON
-      //console.log('Push subscription object:');
-      //console.log(JSON.stringify(subscription.toJSON(), null, 2));
+        const swRegistration = await navigator.serviceWorker.getRegistration();
+        const permission = await Notification.requestPermission();
+        const subscription = await swRegistration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey
+        });
 
-      vapid = JSON.stringify(subscription.toJSON(), null, 2);
-      
+        // 4. Show subscription details in JSON
+        //console.log('Push subscription object:');
+        //console.log(JSON.stringify(subscription.toJSON(), null, 2));
+
+        vapid = JSON.stringify(subscription.toJSON(), null, 2);
+      }
       if (isValidReady == true)
       {
         copyToClipboard(vapid)
