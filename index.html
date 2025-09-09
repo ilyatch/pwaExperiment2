@@ -220,6 +220,16 @@ function fallbackCopy(text) {
 //  copyToClipboard("Hello world!");
 //});
 
+function saveNumber(value) {
+  const req = indexedDB.open("mydb", 1);
+  req.onupgradeneeded = () => req.result.createObjectStore("store");
+  req.onsuccess = () => {
+    req.result.transaction("store", "readwrite")
+      .objectStore("store")
+      .put(value, "mynumber");
+  };
+}
+
    function updateBadge(){
     (async () =>
     {
@@ -239,7 +249,8 @@ function fallbackCopy(text) {
 
     })();
 
-    localStorage.setItem('count', getToggledCount());
+    //localStorage.setItem('count', getToggledCount());
+    saveNumber(getToggledCount());
 
     /*if (navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({

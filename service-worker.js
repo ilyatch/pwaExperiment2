@@ -48,7 +48,7 @@ self.addEventListener('fetch', event => {
 
 self.addEventListener('push', event => {
     const data = event.data ? event.data.text() : 'No payload';
-    var count = localStorage.getItem("count");
+    var count = loadNumber();
     data.title = "changed "+count;
     event.waitUntil(
         self.registration.showNotification('Push Received '+count, {
@@ -56,6 +56,17 @@ self.addEventListener('push', event => {
         })
     );
 });
+
+function loadNumber() {
+  return new Promise((resolve) => {
+    const req = indexedDB.open("mydb", 1);
+    req.onsuccess = () => {
+      req.result.transaction("store", "readonly")
+        .objectStore("store")
+        .get("mynumber").onsuccess = e => resolve(e.target.result);
+    };
+  });
+}
 
 self.addEventListener('pushaaa', event => {
     const data = event.data ? event.data.text() : 'No payload';
