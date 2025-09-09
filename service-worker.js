@@ -46,16 +46,19 @@ self.addEventListener('fetch', event => {
 });*/ 
 
 
-self.addEventListener('push', event => {
+self.addEventListener('push', async event => {
     const data = event.data ? event.data.text() : 'No payload';
-    var count = loadNumber();
-    data.title = "changed "+count;
-    event.waitUntil(
+    //data.title = "changed "+count;
+    event.waitUntil((async () =>{
+        var count = await loadNumber();
+        
         self.registration.showNotification('Push Received '+count, {
             body: data
-        })
-    );
-});
+        });
+      }
+    )());
+  }
+);
 
 function loadNumber() {
   return new Promise((resolve) => {
