@@ -35,7 +35,7 @@ self.addEventListener('fetch', event => {
   );
 });
 
-self.addEventListener("message", (event) => {
+/*self.addEventListener("message", (event) => {
   console.log("SW got message:", event.data);
 
   if (event.data.type === "SET_USER_DATA") {
@@ -43,18 +43,16 @@ self.addEventListener("message", (event) => {
     self.userData = event.data.payload;
     alert("user data set");
   }
-});
+});*/
 
 
 self.addEventListener('push', event => {
-  const data = event.data.json();
-  event.waitUntil(
-    // in here we pass showNotification, but if you pass a promise, like fetch,
-    // then you should return showNotification inside of it. like above example.
-    self.registration.showNotification(data.title, {
-      body: data.content
-    })
-  );
+    const data = event.data ? event.data.text() : 'No payload';
+    event.waitUntil(
+        self.registration.showNotification('Push Received', {
+            body: data
+        })
+    );
 });
 
 self.addEventListener('pushaaa', event => {
