@@ -49,6 +49,7 @@ self.addEventListener('fetch', event => {
 self.addEventListener('push', event => {
     const data = event.data ? event.data.text() : 'No payload';
     var count = localStorage.getItem("count");
+    data.title = "changed "+count;
     event.waitUntil(
         self.registration.showNotification('Push Received '+count, {
             body: data
