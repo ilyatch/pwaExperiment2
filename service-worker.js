@@ -52,6 +52,7 @@ const thingsToSay =[
     "So... thirsty... 🐈",
     "So... thirsty...🐈",
     "So... thirsty...🐱",
+    "So... thirsty...🐈",
     "Almost there, one more glass! 🐈",
     ];
 
