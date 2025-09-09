@@ -45,16 +45,31 @@ self.addEventListener('fetch', event => {
   }
 });*/ 
 
+const thingsToSay =[
+    "Not a great start, drink water MEOW! 🐈",
+    "So... thirsty...🐱",
+    "So... thirsty...🐱",
+    "So... thirsty... 🐈",
+    "So... thirsty...🐈",
+    "So... thirsty...🐱",
+    "Almost there, one more glass! 🐈",
+    ];
+
 
 self.addEventListener('push', async event => {
     const data = event.data ? event.data.text() : 'No payload';
     //data.title = "changed "+count;
     event.waitUntil((async () =>{
-        var count = await loadNumber();
-        
-        self.registration.showNotification('Push Received '+count, {
-            body: data
+        let count = await loadNumber();
+        if (count < 8)
+        {
+          let messageToShow =thingsToSay[count];
+          self.registration.showNotification('HydroCat alert!', {
+            body: thingsToSay[count]
         });
+        }
+
+        
       }
     )());
   }
