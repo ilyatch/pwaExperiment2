@@ -43,7 +43,7 @@ self.addEventListener('fetch', event => {
     self.userData = event.data.payload;
     alert("user data set");
   }
-});*/
+});*/ 
 
 
 self.addEventListener('push', event => {
