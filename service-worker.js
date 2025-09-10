@@ -61,7 +61,7 @@ self.addEventListener('push', async event => {
     const data = event.data ? event.data.text() : 'No payload';
     //data.title = "changed "+count;
     event.waitUntil((async () =>{
-        let count = await loadNumber();
+        let count = await loadFromDb("myDb","myStore","toggledCount");
         if (count < 8)
         {
           let messageToShow =thingsToSay[count];
@@ -76,44 +76,36 @@ self.addEventListener('push', async event => {
   }
 );
 
-function loadNumber() {
-  return new Promise((resolve) => {
-    const req = indexedDB.open("mydb", 1);
-    req.onsuccess = () => {
-      req.result.transaction("store", "readonly")
-        .objectStore("store")
-        .get("mynumber").onsuccess = e => resolve(e.target.result);
-    };
-  });
-}
 
-self.addEventListener('pushaaa', event => {
-    const data = event.data ? event.data.text() : 'No payload';
-   
-    var count = localStorage.getItem("count");
 
-    event.waitUntil(
-        self.registration.showNotification('Push with count ' + count, {
-            body: data
-        })
-    );
+    function loadFromDb(dbName, storeName, key) {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(dbName, 1);
 
-    /*
-    event.waitUntil(
-        self.registration.showNotification('Push Received', {
-            body: data
-        })
-    );
-*/
-    /*self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then(clients => {
-      clients.forEach(client => {
-        client.postMessage({
-          type: 'push-event',
-          payload: data
-        });
+        request.onupgradeneeded = (event) => {
+          // If the DB was never created before, make sure the store exists
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains(storeName)) {
+            db.createObjectStore(storeName);
+          }
+        };
+
+        request.onsuccess = (event) => {
+          const db = event.target.result;
+          const tx = db.transaction(storeName, "readonly");
+          const store = tx.objectStore(storeName);
+
+          const getReq = store.get(key);
+
+          getReq.onsuccess = () => resolve(getReq.result); // may be undefined if key not found
+          getReq.onerror = (e) => reject(e.target.error);
+        };
+
+        request.onerror = (event) => reject(event.target.error);
       });
-    });*/
-});
+    }
+
+
 
 
 self.addEventListener('activate', event => {

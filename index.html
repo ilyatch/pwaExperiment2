@@ -84,40 +84,132 @@
   <header><img id="imgHeader" src="header.png"></header>
   <main>
     <div class="cell">
-      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+      <img class="toggle-img" src="empty.png" data-name="1" data-empty="empty.png" data-full="full.png" alt="">
     </div>
     <div class="cell">
-      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+      <img class="toggle-img" src="empty.png" data-name="2" data-empty="empty.png" data-full="full.png" alt="">
     </div>
     <div class="cell">
-      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+      <img class="toggle-img" src="empty.png" data-name="3" data-empty="empty.png" data-full="full.png" alt="">
     </div>
     <div class="cell">
-      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+      <img class="toggle-img" src="empty.png" data-name="4" data-empty="empty.png" data-full="full.png" alt="">
     </div>
     <div class="cell">
-      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+      <img class="toggle-img" src="empty.png" data-name="5" data-empty="empty.png" data-full="full.png" alt="">
     </div>
     <div class="cell">
-      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+      <img class="toggle-img" src="empty.png" data-name="6" data-empty="empty.png" data-full="full.png" alt="">
     </div>
     <div class="cell">
-      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+      <img class="toggle-img" src="empty.png" data-name="7" data-empty="empty.png" data-full="full.png" alt="">
     </div>
     <div class="cell">
-      <img class="toggle-img" src="empty.png" data-empty="empty.png" data-full="full.png" alt="">
+      <img class="toggle-img" src="empty.png" data-name="8" data-empty="empty.png" data-full="full.png" alt="">
     </div>
   </main>
   <footer><button id="reset-btn">Reset All</button>
 
 
   <script type="module">
+
+    function saveToDb(dbName, storeName, key, value) {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(dbName, 1);
+
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains(storeName)) {
+            db.createObjectStore(storeName);
+          }
+        };
+
+        request.onsuccess = (event) => {
+          const db = event.target.result;
+          const tx = db.transaction(storeName, "readwrite");
+          const store = tx.objectStore(storeName);
+
+          store.put(value, key); // put overwrites if key already exists
+
+          tx.oncomplete = () => resolve(true);
+          tx.onerror = (e) => reject(e.target.error);
+        };
+
+        request.onerror = (event) => {
+          reject(event.target.error);
+        };
+      });
+    }
+    
+    function loadFromDb(dbName, storeName, key) {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(dbName, 1);
+
+        request.onupgradeneeded = (event) => {
+          // If the DB was never created before, make sure the store exists
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains(storeName)) {
+            db.createObjectStore(storeName);
+          }
+        };
+
+        request.onsuccess = (event) => {
+          const db = event.target.result;
+          const tx = db.transaction(storeName, "readonly");
+          const store = tx.objectStore(storeName);
+
+          const getReq = store.get(key);
+
+          getReq.onsuccess = () => resolve(getReq.result); // may be undefined if key not found
+          getReq.onerror = (e) => reject(e.target.error);
+        };
+
+        request.onerror = (event) => reject(event.target.error);
+      });
+    }
+
+
+
+    
+    
     const applicationServerKey = urlBase64ToUint8Array('BO1d4VwN0Ivx6hGA1pH1WL84NhD3C7Hd45uTeVQR01DiQXaT6gmbOhEte2EGkFeUeGra2NyPkzpw_ygGZQw3sFk');
+
+
 
     // Register the service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js');
     }
+
+
+    function loadNumber() {
+      return new Promise((resolve) => {
+        const req = indexedDB.open("mydb", 1);
+        req.onsuccess = () => {
+          req.result.transaction("store", "readonly")
+            .objectStore("store")
+            .get("mynumber").onsuccess = e => resolve(e.target.result);
+        };
+      });
+    }
+
+    window.addEventListener('load', async () => {
+      console.log('App started (window loaded)');
+      // You can initialize app state here
+
+      //let count = await loadNumber();
+      //if (count == undefined){
+      //  count = 0
+      //}
+
+      document.querySelectorAll('.toggle-img').forEach(async img => {
+        let isEmpty = await loadFromDb("myDb","myStore", img.dataset.name)
+        //const isEmpty = img.src.includes(img.dataset.empty);
+        img.src = isEmpty ? img.dataset.full : img.dataset.empty;
+      });
+
+      
+    });
 
     navigator.serviceWorker.addEventListener('message', event => {
       const message = event.data;
@@ -130,6 +222,7 @@
       }
     });
 
+    /*
     const thingsToSay =[
     "Not a great start, drink water MEOW! 🐈",
     "So... thirsty...🐱",
@@ -139,8 +232,9 @@
     "So... thirsty...🐱",
     "Almost there, one more glass! 🐈",
     ];
+    */
 
-    function handlePushMessage(data) {
+    /*function handlePushMessage(data) {
 
       var count = getToggledCount();
       if (count < 8)
@@ -148,7 +242,7 @@
         let messageToShow =thingsToSay[count];
         alert("have to say " + messageToShow);
       }
-    }
+    }*/
 
     document.getElementById("imgHeader").addEventListener('click', async ()=>{
       
@@ -220,6 +314,7 @@ function fallbackCopy(text) {
 //  copyToClipboard("Hello world!");
 //});
 
+/*
 function saveNumber(value) {
   const req = indexedDB.open("mydb", 1);
   req.onupgradeneeded = () => req.result.createObjectStore("store");
@@ -229,6 +324,19 @@ function saveNumber(value) {
       .put(value, "mynumber");
   };
 }
+*/
+
+/*
+function saveState(name,value) {
+  const req = indexedDB.open("mydb", 1);
+  req.onupgradeneeded = () => req.result.createObjectStore("store");
+  req.onsuccess = () => {
+    req.result.transaction("store", "readwrite")
+      .objectStore("store")
+      .put(value, name);
+  };
+}
+*/
 
    function updateBadge(){
     (async () =>
@@ -250,7 +358,8 @@ function saveNumber(value) {
     })();
 
     //localStorage.setItem('count', getToggledCount());
-    saveNumber(getToggledCount());
+    //saveNumber(getToggledCount());
+    saveToDb("myDb","myStore","toggledCount", getToggledCount());
 
     /*if (navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
@@ -261,21 +370,26 @@ function saveNumber(value) {
   }
 
   document.querySelectorAll('.toggle-img').forEach(img => {
-    img.addEventListener('click', () => {
+    img.addEventListener('click', async () => {
       const isEmpty = img.src.includes(img.dataset.empty);
       img.src = isEmpty ? img.dataset.full : img.dataset.empty;
+      
+      //saveState(img.dataset.name, isEmpty);
+      await saveToDb("myDb","myStore", img.dataset.name, isEmpty)
+
       updateBadge();
+      
       let count = getToggledCount();
       console.log("Currently full:", count); // example usage
       if (count == 8)
       {
-        swapImages();
+        victoryDance();
       }
 
     });
   });
 
-  function swapImages() {
+  function victoryDance() {
       const images = document.querySelectorAll('.toggle-img');
       
       // Save originals
